@@ -31,21 +31,25 @@ def get_shop_list_by_dishes(dishes, person_count):
     return pprint(dict_all_ingredients)
 
 
-list_file_address = ['1.txt', '2.txt', '3.txt']
-list_text_all_files = []
-for _ in range(len(list_file_address)):
-    full_path = os.path.join(os.getcwd(), 'a_group_of_files_to_merge', list_file_address[_])
-    with open(full_path, 'r', encoding='utf-8') as file:
-        list_text_all_files.append(file.readlines())
-list_text_all_files.sort()
-list_text_all_files.reverse()
+def sorts_files_by_text_length(file_list: list, locations):
+    list_all_files = []
+    dict_help = {}
+    for _i, _j in enumerate(file_list):
+        full_path = os.path.join(os.getcwd(), locations, _j)
+        with open(full_path, 'r', encoding='utf-8') as files:
+            list_all_files.append(files.readlines())
+            dict_help.setdefault(len(list_all_files[_i]), _j)
+    list_all_files.sort()
+    list_all_files.reverse()
+
+    with open('sorted_file.txt', 'w', encoding='utf-8') as files:
+        for _i in list_all_files:
+            files.write(dict_help[len(_i)])
+            files.write('\n')
+            files.write(str(len(_i)))
+            files.write('\n')
+            files.writelines(_i)
+            files.write('\n')
 
 
-with open('sorted_file.txt', 'w', encoding='utf-8') as file:
-    for i, _ in enumerate(list_text_all_files):
-        file.write(list_file_address[i])
-        file.write('\n')
-        file.write(str(len(list_text_all_files[i])))
-        file.write('\n')
-        file.writelines(_)
-        file.write('\n')
+sorts_files_by_text_length(['1.txt', '2.txt', '3.txt'], 'a_group_of_files_to_merge')
